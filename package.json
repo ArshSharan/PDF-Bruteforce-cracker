@@ -1,0 +1,24 @@
+{
+  "name": "password-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Password generator using weighted probabilities",
+  "main": "wordgen.js",
+  "scripts": {
+    "start": "node wordgen.js",
+    "simple": "node wordgen.js --simple"
+  },
+  "keywords": [
+    "password",
+    "generator",
+    "weighted"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "node-qpdf2": "^6.0.0",
+    "pdf-encrypt-decrypt": "^1.0.0",
+    "pdf-lib": "^1.17.1",
+    "pdf-lite": "^1.6.4"
+  }
+}
