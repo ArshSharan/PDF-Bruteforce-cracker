@@ -9,7 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = 3001;
+// Render automatically provides a PORT environment variable
+const PORT = process.env.PORT || 3001;
 
 // Store in-memory so we can serve decrypted PDF for download
 const sessions = new Map(); // sessionId => { decryptedBuffer, filename }
