@@ -24,10 +24,6 @@ export class PDFEncryptionChecker {
         try {
             const decryptedPdfBuffer = await decryptPDF(this.buffer, password);
 
-            // Only log on success
-            console.log(`Decryption successful`);
-            console.log(`Output buffer length: ${decryptedPdfBuffer.length}`);
-
             return {
                 success: true,
                 data: decryptedPdfBuffer,

@@ -89,11 +89,11 @@
 <!-- ═══ TOP APP BAR ═══════════════════════════════════════════════════════ -->
 <header class="flex justify-between items-center w-full px-8 py-4 bg-[#060e20] fixed top-0 z-50 border-b border-white/5">
   <div class="text-xl font-bold tracking-wider text-[#4edea3] font-headline">Obsidian Sentinel</div>
-  <nav class="hidden md:flex gap-8 items-center">
-    <a class="text-slate-400 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm" href="#">Dashboard</a>
-    <a class="text-slate-400 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm" href="#">File History</a>
-    <a class="text-slate-400 hover:text-white transition-colors font-headline font-bold tracking-tight text-sm" href="#">Security Settings</a>
-  </nav>
+  <div class="hidden md:flex gap-6 items-center">
+    <span class="text-slate-600 font-headline font-bold tracking-tight text-sm select-none">Penetration Testing Lab</span>
+    <span class="w-1 h-1 rounded-full bg-slate-700"></span>
+    <span class="text-slate-600 font-mono text-xs tracking-widest">EDUCATIONAL USE ONLY</span>
+  </div>
   <div class="flex items-center gap-4">
     <!-- Server status -->
     <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider" id="srv-indicator">
@@ -123,13 +123,23 @@
     </div>
   </div>
   <nav class="flex-1 space-y-1">
-    <a class="flex items-center gap-3 px-6 py-3 bg-[#031d4b] text-[#4edea3] border-l-4 border-[#4edea3] font-label text-xs font-medium uppercase tracking-widest" href="#">
+    <a
+      class="flex items-center gap-3 px-6 py-3 bg-[#031d4b] text-[#4edea3] border-l-4 border-[#4edea3] font-label text-xs font-medium uppercase tracking-widest"
+      href="#upload-wrapper"
+      onclick="document.getElementById('main-scroll').scrollTo({top:0,behavior:'smooth'});return false;"
+    >
       <span class="material-symbols-outlined">analytics</span> Document Analysis
     </a>
-    <a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-[#4edea3] hover:bg-[#031d4b]/50 font-label text-xs font-medium uppercase tracking-widest transition-all" href="#">
+    <a
+      class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-[#4edea3] hover:bg-[#031d4b]/50 font-label text-xs font-medium uppercase tracking-widest transition-all cursor-pointer"
+      onclick="document.getElementById('stages-panel').scrollIntoView({behavior:'smooth',block:'start'});return false;"
+    >
       <span class="material-symbols-outlined">enhanced_encryption</span> Decryption Tasks
     </a>
-    <a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-[#4edea3] hover:bg-[#031d4b]/50 font-label text-xs font-medium uppercase tracking-widest transition-all" href="#">
+    <a
+      class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-[#4edea3] hover:bg-[#031d4b]/50 font-label text-xs font-medium uppercase tracking-widest transition-all cursor-pointer"
+      onclick="openLogModal();return false;"
+    >
       <span class="material-symbols-outlined">terminal</span> System Logs
     </a>
   </nav>
@@ -150,12 +160,10 @@
     </div>
   </div>
   <div class="pb-12 border-t border-white/5 pt-4">
-    <a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-[#4edea3] transition-all font-label text-xs font-medium uppercase tracking-widest" href="#">
-      <span class="material-symbols-outlined">settings</span> Settings
-    </a>
-    <a class="flex items-center gap-3 px-6 py-3 text-slate-400 hover:text-[#4edea3] transition-all font-label text-xs font-medium uppercase tracking-widest" href="#">
-      <span class="material-symbols-outlined">help</span> Support
-    </a>
+    <div class="px-6 py-3">
+      <div class="text-[9px] text-slate-700 uppercase tracking-widest font-bold mb-1">Engine</div>
+      <div class="text-[11px] text-slate-500 font-mono" id="sidebar-srv-status">Checking server…</div>
+    </div>
   </div>
 </aside>
 
@@ -519,6 +527,40 @@
   </div>
 </footer>
 
+
+<!-- ═══ SYSTEM LOGS MODAL ══════════════════════════════════════════════════ -->
+<div id="log-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);">
+  <div class="w-full max-w-4xl bg-[#05183c] border border-outline-variant/30 rounded-xl shadow-2xl shadow-black/60 flex flex-col" style="max-height:85vh;">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-white/5">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary">terminal</span>
+        <div>
+          <div class="text-sm font-headline font-bold text-on-surface">System Logs</div>
+          <div class="text-[10px] text-slate-500 font-mono uppercase tracking-widest">sentinel_engine_v2 — full output buffer</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="copyLogs()" class="flex items-center gap-1.5 px-3 py-1.5 text-[11px] text-slate-400 hover:text-primary border border-white/10 hover:border-primary/30 rounded transition-all font-mono uppercase tracking-wider">
+          <span class="material-symbols-outlined text-sm">content_copy</span> Copy All
+        </button>
+        <button onclick="closeLogModal()" class="p-1.5 hover:bg-white/5 rounded transition-all text-slate-400 hover:text-on-surface">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+    </div>
+    <!-- Log body -->
+    <div class="flex-1 overflow-y-auto px-6 py-4 font-mono text-[12px] space-y-0.5" id="modal-log-body" style="background:#020c1e;">
+      <div class="text-slate-700">-- No logs yet. Run an attack to generate output. --</div>
+    </div>
+    <!-- Modal footer -->
+    <div class="flex items-center justify-between px-6 py-3 border-t border-white/5">
+      <div class="text-[10px] text-slate-600 font-mono" id="modal-log-count">0 lines</div>
+      <button onclick="closeLogModal()" class="px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-on-primary bg-primary hover:brightness-110 rounded transition-all">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ APPLICATION LOGIC ══════════════════════════════════════════════════ -->
 <script>
 const API = 'http://localhost:3001';
@@ -554,10 +596,14 @@ const intelLive     = document.getElementById('intel-live');
       document.getElementById('srv-dot').className   = 'w-2 h-2 rounded-full bg-primary animate-pulse';
       document.getElementById('srv-label').className = 'text-primary text-xs font-semibold uppercase tracking-wider';
       document.getElementById('srv-label').textContent = 'Server Online';
+      document.getElementById('sidebar-srv-status').textContent = 'localhost:3001 — online';
+      document.getElementById('sidebar-srv-status').classList.replace('text-slate-500','text-primary');
     } else throw new Error();
   } catch {
     document.getElementById('srv-dot').className   = 'w-2 h-2 rounded-full bg-error';
     document.getElementById('srv-label').textContent = 'Server Offline';
+    document.getElementById('sidebar-srv-status').textContent = 'offline — start server';
+    document.getElementById('sidebar-srv-status').classList.replace('text-slate-500','text-error');
   }
 })();
 
@@ -1003,6 +1049,46 @@ function handleEvent(type, d) {
       addLog('─── Session complete ───', 'text-slate-700');
       break;
   }
+}
+
+// ── System Logs Modal ────────────────────────────────────────────────────
+function openLogModal() {
+  const modal   = document.getElementById('log-modal');
+  const body    = document.getElementById('modal-log-body');
+  const counter = document.getElementById('modal-log-count');
+  modal.classList.remove('hidden');
+
+  if (logBuffer.length === 0) {
+    body.innerHTML = '<div class="text-slate-700">-- No logs yet. Run an attack to generate output. --</div>';
+    counter.textContent = '0 lines';
+  } else {
+    body.innerHTML = logBuffer.map((l, i) =>
+      `<div class="flex gap-3 py-0.5 border-b border-white/3">
+         <span class="text-slate-700 select-none w-8 text-right flex-shrink-0">${i + 1}</span>
+         <span class="text-slate-600 flex-shrink-0">[${l.ts}]</span>
+         <span class="${l.colour}">${esc(l.msg)}</span>
+       </div>`
+    ).join('');
+    counter.textContent = `${logBuffer.length} lines`;
+    body.scrollTop = body.scrollHeight;
+  }
+
+  // Close on backdrop click
+  modal.onclick = e => { if (e.target === modal) closeLogModal(); };
+  document.onkeydown = e => { if (e.key === 'Escape') closeLogModal(); };
+}
+
+function closeLogModal() {
+  document.getElementById('log-modal').classList.add('hidden');
+  document.onkeydown = null;
+}
+
+function copyLogs() {
+  const text = logBuffer.map(l => `[${l.ts}] ${l.msg}`).join('\n');
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('#log-modal button[onclick="copyLogs()"]');
+    if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.innerHTML = '<span class="material-symbols-outlined text-sm">content_copy</span> Copy All'; }, 1500); }
+  });
 }
 </script>
 </body>

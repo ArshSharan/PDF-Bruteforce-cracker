@@ -1,3 +1,21 @@
-node_modules*
+node_modules/
+
+# Large wordlist files — download separately (see README)
 server/rockyou.txt
-server/rockyou-75.txt
+server/rockyou-*.txt
+server/passwords.txt
+
+# Uploaded PDFs (temp files if any land on disk)
+server/uploads/
+
+# OS artefacts
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.local

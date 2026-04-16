@@ -57,12 +57,22 @@ export async function bruteForcePDF(pdfBuffer, onEvent, options = {}) {
 
     // ── STAGE 2: Load wordlist ────────────────────────────────────────────
     let wordList = [];
-    const passwordsPath = join(__dirname, 'rockyou.txt');
-    try {
-        const txt = readFileSync(passwordsPath, 'utf8');
-        wordList = txt.split('\n').map(l => l.trimEnd()).filter(Boolean);
-    } catch (_) {
-        wordList = [];
+    // Priority: passwords.txt (generic name) → rockyou.txt (development convenience)
+    const candidatePaths = [
+        join(__dirname, 'passwords.txt'),
+        join(__dirname, 'rockyou.txt'),
+        join(__dirname, '..', 'passwords.txt'),
+    ];
+    for (const p of candidatePaths) {
+        try {
+            const txt = readFileSync(p, 'utf8');
+            wordList = txt.split('\n').map(l => l.trimEnd()).filter(Boolean);
+            console.log(`[cracker] Loaded wordlist: ${p} (${wordList.length.toLocaleString()} entries)`);
+            break;
+        } catch (_) { /* try next */ }
+    }
+    if (wordList.length === 0) {
+        console.warn('[cracker] No wordlist file found — skipping dictionary phase. Create server/passwords.txt.');
     }
 
     onEvent({ type: 'wordlist_loaded', count: wordList.length });
